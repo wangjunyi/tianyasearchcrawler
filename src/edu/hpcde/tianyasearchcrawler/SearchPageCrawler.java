@@ -1,10 +1,15 @@
 package edu.hpcde.tianyasearchcrawler;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
- * 用于抓取搜索页的帖子url等信息
+ * 用于抓取并保存搜索页的帖子url等信息
  * @author Fang
  *
  */
@@ -46,20 +51,48 @@ public class SearchPageCrawler {
 		this.searchby = searchby;
 		
 	}
+	
+	
 	public void save2DB(ArrayList<String>  urlList){
 		
 	}
-	public void save2File(ArrayList<String> urlList, String filePath){
-		
+	
+	
+	public void save2File(ArrayList<String> urlList, String filePath) throws IOException{
+		try {
+		  File f=new File("C:\\Users\\wang\\Desktop\\java\\tianyasearchcrawler\\UrlList.txt");
+		  BufferedWriter bw=new BufferedWriter(new FileWriter(f));
+		  for(int i=0;i<urlList.size();i++){
+	            bw.write(urlList.get(i));
+	            bw.newLine();
+	        }
+	        bw.close();
+		      } catch (IOException e1) {
+		    	e1.printStackTrace();
+		      System.out.println("文件写入错误");
+		      System.exit(-1);
+		    }
 	}
+	
+	
 	public void run() throws Exception{
 		String nakedurl = "http://search.tianya.cn/bbs";
-		String args = "?q=" + this.keyword + "&s=" + this.sortby +"&f=" + this.searchby;	
-		Parser parser = new Parser(nakedurl, args);
-		ArrayList<String> urlList = parser.getUrlList();
-		for(String s:urlList){
-			System.out.println(s);
+		ArrayList<String> urlListTotal=new ArrayList<String>();
+		int count;
+		String args = "?q=" + this.keyword +"&pn=1" + "&s=" + this.sortby +"&f=" + this.searchby;	
+		Parser a=new Parser(nakedurl, args);
+		count=a.getLastPageNumber();
+		int i;
+		for(i=1;i<=count;i++)
+		{ 
+			args = "?q=" + this.keyword +"&pn="+i + "&s=" + this.sortby +"&f=" + this.searchby;	
+			Parser parser = new Parser(nakedurl, args);
+			System.out.println(parser.url);
+			ArrayList<String> urlList = parser.getUrlList();
+			urlListTotal.addAll(urlList);
+			urlList.clear();
 		}
+		save2File(urlListTotal,"");
 		
 	}
 	/**

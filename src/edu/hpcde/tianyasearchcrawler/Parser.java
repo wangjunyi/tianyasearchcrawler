@@ -7,6 +7,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.sun.org.apache.bcel.internal.generic.LASTORE;
+
+import sun.net.idn.Punycode;
+
 /** 
  * 将url解析并返回结果 
  * @author  Fang 
@@ -21,9 +25,10 @@ public class Parser {
 	 */
 	public Parser(String url, String args) {
 		this.url = url + args;
-		System.out.println(this.url);
 
 	}
+	
+	
 	public Document url2Doc() throws Exception{
 		Document doc = Jsoup.connect(this.url)
 				.timeout(3000)
@@ -31,6 +36,8 @@ public class Parser {
 				.get();
 		return doc;
 	}
+	
+	
 	public ArrayList<String> getUrlList() throws Exception{
 		ArrayList<String> urlList = new ArrayList<String>();
 		Document doc = url2Doc();
@@ -41,6 +48,17 @@ public class Parser {
 		}
 		return urlList;
 	}
+	
+	public int getLastPageNumber()throws Exception{
+		String path="#main > div.long-pages > a:nth-last-child(2)";
+		int n;
+		Document doc = url2Doc();
+		Element lastPageNumber=doc.select(path).first();
+		n=Integer.parseInt(lastPageNumber.text());
+		return n;
+	}
+	
+	
 	public ArrayList<HeadInfo> getHeadInfos() throws Exception{
 		ArrayList<HeadInfo> headinfos = new ArrayList<HeadInfo>();
 		Document doc = url2Doc();

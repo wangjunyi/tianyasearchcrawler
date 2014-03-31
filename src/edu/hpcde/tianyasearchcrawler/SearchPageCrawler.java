@@ -4,9 +4,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  * 用于抓取并保存搜索页的帖子url等信息
@@ -60,7 +62,7 @@ public class SearchPageCrawler {
 	
 	public void save2File(ArrayList<String> urlList, String filePath) throws IOException{
 		try {
-		  File f=new File("C:\\Users\\wang\\Desktop\\java\\tianyasearchcrawler\\UrlList.txt");
+		  File f=new File(filePath);
 		  BufferedWriter bw=new BufferedWriter(new FileWriter(f));
 		  for(int i=0;i<urlList.size();i++){
 	            bw.write(urlList.get(i));
@@ -87,14 +89,24 @@ public class SearchPageCrawler {
 		{ 
 			args = "?q=" + this.keyword +"&pn="+i + "&s=" + this.sortby +"&f=" + this.searchby;	
 			Parser parser = new Parser(nakedurl, args);
-			System.out.println(parser.url);
+			//System.out.println(parser.url);  输出每一页的url，暂时用不到；
 			ArrayList<String> urlList = parser.getUrlList();
 			urlListTotal.addAll(urlList);
 			urlList.clear();
 		}
-		save2File(urlListTotal,"");
+		String filePath="C:\\Users\\wang\\Desktop\\java\\tianyasearchcrawler\\"+this.keyword+".txt";
+		save2File(urlListTotal,filePath);
 		
 	}
+	
+	public void run2() throws Exception{//获取当前页面的nestpage URL，并输出当前页面的第一条回复
+		String Test="http://bbs.tianya.cn/post-funinfo-5154549-1.shtml";//测试用例，文章姚笛天涯帖子链接；
+		PageParser b=new PageParser(Test);
+		b.getFirstReply();
+		b.getNextPageUrl();
+		}
+
+	
 	/**
 	 * @param args
 	 * 设想参数：关键字、存储文件路径
@@ -102,8 +114,10 @@ public class SearchPageCrawler {
 	public static void main(String[] args){
 
 		try {
-			SearchPageCrawler spc = new SearchPageCrawler("MH370");
-			spc.run();
+			SearchPageCrawler spc = new SearchPageCrawler("HP");
+			//spc.run();          暂时屏蔽该功能
+			//System.out.println("文件保存成功！");
+			spc.run2();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

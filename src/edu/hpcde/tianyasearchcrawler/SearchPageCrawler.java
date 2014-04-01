@@ -101,10 +101,13 @@ public class SearchPageCrawler {
 	
 	public void run2() throws Exception{//获取当前页面的nestpage URL，并输出当前页面的第一条回复
 		String Test="http://bbs.tianya.cn/post-funinfo-5154549-1.shtml";//测试用例，文章姚笛天涯帖子链接；
-		PageParser b=new PageParser(Test);
-		b.getFirstReply();
-		b.getNextPageUrl();
-		}
+		PageParser c=new PageParser(Test);
+		do{
+			PageParser c=new PageParser(Test);
+		    c.getFirstReply();
+		    c.currentUrl=c.getNextPageUrl();
+		}while(c.currentUrl!=null);
+	}
 
 	
 	/**

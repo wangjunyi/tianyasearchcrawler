@@ -100,13 +100,12 @@ public class SearchPageCrawler {
 	}
 	
 	public void run2() throws Exception{//获取当前页面的nestpage URL，并输出当前页面的第一条回复
-		String Test="http://bbs.tianya.cn/post-funinfo-5154549-1.shtml";//测试用例，文章姚笛天涯帖子链接；
-		PageParser c=new PageParser(Test);
+		String p="http://bbs.tianya.cn/post-funinfo-5154549-1.shtml";//测试用例，文章姚笛天涯帖子链接；
 		do{
-			PageParser c=new PageParser(Test);
+			PageParser c=new PageParser(p);
 		    c.getFirstReply();
-		    c.currentUrl=c.getNextPageUrl();
-		}while(c.currentUrl!=null);
+		    p=c.getNextPageUrl();
+		}while(p!=null);
 	}
 
 	

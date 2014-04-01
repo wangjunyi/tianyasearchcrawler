@@ -52,7 +52,7 @@ public class PageParser {
 		if(link != null){
 			System.out.println("¡¾ÏÂÒ»Ò³Á´½Ó£º¡¿http://bbs.tianya.cn"+link.attr("href"));
 			System.out.println("");
-			String temp=link.attr("href");
+			String temp="http://bbs.tianya.cn"+link.attr("href");
 			return temp;
 		}
 		else{
